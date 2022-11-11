@@ -16,12 +16,19 @@
 </head>
 <body>
     <header>
-        <h1><a href="#  ">BSALE</a></h1>
+        <h1><a href="#">BSALE</a></h1>
         <form>
             <input type="text" placeholder="Busca un artículo" class="header__search">
             <button type="submit" class="search-submit"><img src="./img/icon-arrow.svg" alt="buscar" class="img__search-arrow"></button>
         </form>
-        <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+        <i class="fa-solid fa-cart-shopping main-cart" id="open-cart"><div class="item-count"></div></i>
+        <div id="cart-bg" class="hidden"></div>
+        <section id="cart" class="hidden">
+            <p>Producto: Energetica MR Big</p>
+            <p>Precio: $1490</p>
+            <p>Descuento: $298</p>
+            <p>Total a pagar: 1192</p>
+        </section>
     </header>
     <main>
         <aside class="sidebar">
