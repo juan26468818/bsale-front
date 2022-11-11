@@ -23,8 +23,23 @@
         </form>
         <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
     </header>
-    <main id="product-container">
-        
+    <main>
+        <aside class="sidebar">
+            <h3>Filtros</h3>
+            <h4>Precio</h4>
+            <div>Min:
+                <input class="price-filter" type="range" min="0" max="100000" step="1000" value="0" oninput="this.nextElementSibling.value = '$' + this.value">
+                <output>$0</output>
+            </div>
+            <div>Max:
+                <input class="price-filter" type="range" min="0" max="100000" step="1000" value="100000" oninput="this.nextElementSibling.value = '$' + this.value">
+                <output>$100000</output>
+            </div>
+            <h4>Categorías</h4>
+            <div id="categories-container"></div>
+            <button type="submit" class="filter">Filtrar</button>
+        </aside>
+        <section id="product-container"></section>
     </main>
 </body>
 </html>
