@@ -33,8 +33,12 @@ i, h1, a{
 .main-cart{
     position: relative;
 }
+.main-cart:hover{
+    cursor: pointer;
+    color: var(--Dark-blue);
+}
 .main-cart::after{
-    content: "1";
+    content: attr(value);
     top: -.5rem;
     right: -.5rem;
     text-align: center;
@@ -88,6 +92,8 @@ main{
 }
 
 #cart{
+    min-height: 100%;
+    max-width: 35rem;
     background-color: var(--Dark-cyan);
     position: absolute;
     top: 50%;
@@ -96,10 +102,54 @@ main{
     z-index: 5;
     font-size: 1.5rem;
     color: var(--White);
-    padding: 2rem;
     border-radius: .5rem;
+    /* overflow: hidden; */
+}
+.cart-img{
+    width: 100%;
+}
+.order-container{
+    list-style: none;
+    margin: 1rem 0;
+}
+.product-quantity{
+    margin-right: 1rem;
+}
+.order-product{
+    display: flex;
+}
+.product-price{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+.order-description{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 4rem;
+}
+.total-buy{
+    text-align: right;
+}
+.total-buy__amount{
+    margin-left: 1rem;
+}
+.pay-order-btn{
+    background-color: var(--Very-dark-blue);
+    color: var(--White);
+    border: none;
+    border-radius: 1rem;
+    padding: .7rem 2rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    letter-spacing: .1rem;
+}
+.pay-order-btn:hover{
+    color: var(--Very-dark-blue);
+    background-color: var(--Cream);
 }
 .sidebar{
+    background-color: var(--White);
     width: 18.5rem;
     border-right: 1px solid var(--Dark-cyan);
     border-radius: .5rem;
@@ -157,6 +207,10 @@ h4{
     justify-content: center;
     align-items: center;
 }
+.product-discount{
+    color: red;
+    font-weight: bold;
+}
 .add-to-cart-btn{
     border: none;
 }
@@ -167,6 +221,9 @@ h4{
     border: 1px solid var(--Very-dark-blue);
     padding: .5rem;
     cursor: pointer;
+}
+.add-to-cart:hover{
+    color: var(--Dark-cyan);
 }
 .filter{
     background-color: vaR(--Dark-cyan);
@@ -187,4 +244,10 @@ h4{
 }
 .price-filter{
     margin: .5rem 0;
+}
+footer{
+    text-align: center;
+}
+small > a{ 
+    color: var(--Very-dark-blue);
 }
