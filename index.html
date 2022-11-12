@@ -16,13 +16,15 @@
 </head>
 <body>
     <header>
-        <h1><a href="#">BSALE</a></h1>
+        <h1><a href="/">BSALE</a></h1>
         <form>
             <input type="text" placeholder="Busca un artículo" class="header__search">
             <button type="submit" class="search-submit"><img src="./img/icon-arrow.svg" alt="buscar" class="img__search-arrow"></button>
         </form>
         <i class="fa-solid fa-cart-shopping main-cart" id="open-cart" value="0"><div class="item-count"></div></i>
         <div id="cart-bg" class="hidden"></div>
+    </header>
+    <main>
         <section id="cart" class="hidden">
             <img src="./img/Envio.jpg" class="cart-img" alt="Imagen de envio" aria-hidden="true">
             <div class="order-description">
@@ -32,22 +34,12 @@
                 <button class="pay-order-btn">PAGAR</button>
             </div>
         </section>
-    </header>
-    <main>
         <aside class="sidebar">
-            <h3>Filtros</h3>
-            <h4>Precio</h4>
-            <div>Min:
-                <input class="price-filter" type="range" min="0" max="100000" step="1000" value="0" oninput="this.nextElementSibling.value = '$' + this.value">
-                <output>$0</output>
-            </div>
-            <div>Max:
-                <input class="price-filter" type="range" min="0" max="100000" step="1000" value="100000" oninput="this.nextElementSibling.value = '$' + this.value">
-                <output>$100000</output>
-            </div>
-            <h4>Categorías</h4>
-            <div id="categories-container"></div>
-            <button type="submit" class="filter">Filtrar</button>
+            <h3>Filtrar por categoría</h3>
+            <form name="category-form">
+                <select name="categories" id="categories-container"></select>
+                <button type="submit" class="filter" id="filter">Filtrar</button>
+            </form>
         </aside>
         <section id="product-container"></section>
     </main>
