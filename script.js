@@ -7,6 +7,8 @@ const addToCart = document.getElementsByClassName("add-to-cart");
 const productOrder = document.getElementById("order-description");
 const totalBuyAmount = document.getElementById("total-buy__amount")
 const filterBtn = document.getElementById("filter")
+const searchInput = document.querySelector(".header__search")
+const searchBtn = document.querySelector(".search-submit")
 let filterList = 1
 const categoriesForm = document.forms['category-form']
 const orderList = [];
@@ -14,6 +16,26 @@ const cartItems = [];
 let checkDuplicate = [];
 let itemsInCart = +localStorage.getItem("Total")
 openCart.setAttribute("value", itemsInCart)
+
+
+
+
+
+/* Buscador */
+
+
+const search = async()=>{
+    const searchedProducts = await(await fetch(`/api/products/name/${searchInput.value}`)).json();
+    displayProducts(searchedProducts)
+}
+searchBtn.addEventListener("click", (e) =>{
+    e.preventDefault()
+    search()
+})
+
+
+
+
 
 
 /* DisplayProducts Filtered */
@@ -90,12 +112,10 @@ const displayCategories = (categories)=>{
 }
 
 
-/* Debo seleccionar el keys del local storage y si este es igual a el id de x producto debo agregarlo */
+/* Mostrar los productos en la zona del carrito de compras */
 
 const displayCart =  ((products) =>{
     
-    /* Mostrar los productos en la zona del carrito de compras */
-    /* Necesito que los productos que ingresen sean los productos que se encuentran en el localStorage */
     let productsHTML = ""
     let total = 0
     products.forEach(element => {
