@@ -5,6 +5,7 @@ This web is going to be developed only in Spanish but all the documentation and 
 ### All the documentation is going to be created with JSDoc
 ### This project is deployed with Hekoru, you can access the web here: https://bsales-demo.herokuapp.com/
 ### You can see the Back-End Repository here: https://github.com/juan26468818/bsale-back
+### You can also see the documentation here: https://fancy-bienenstitch-79cee8.netlify.app
 
 ## This project uses the following technologies for the Front-End:
   - HTML5
