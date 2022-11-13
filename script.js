@@ -1,3 +1,6 @@
+
+
+
 const productContainer = document.getElementById("product-container");
 const categoriesContainer = document.getElementById("categories-container");
 const cartBg = document.getElementById("cart-bg");
@@ -19,39 +22,12 @@ let total = 0
 openCart.setAttribute("value", itemsInCart)
 
 
-
-
-
-
-
-/* Buscador */
-
-const search = async()=>{
-    const searchedProducts = await(await fetch(`/api/products/name/${searchInput.value}`)).json();
-    displayProducts(searchedProducts)
-}
-searchBtn.addEventListener("click", (e) =>{
-    e.preventDefault()
-    search()
-})
-
-
-/* DisplayProducts Filtered */
-filterBtn.addEventListener("click", async(e)=>{
-    e.preventDefault()
-    filterList = categoriesForm.categories.value;
-    const productsByCategory = await(await fetch(`/api/products/category/${filterList}`)).json();
-    displayProducts(productsByCategory)
-})
-
-for(let i = 0; i < localStorage.length; i++){
-    if(localStorage.key(i) !== "Total")
-        orderList.push(localStorage.key(i))
-        checkDuplicate.push(localStorage.key(i))
-}
-
-/* Mostrar los productos */
-const displayProducts = (products)=>{
+/**
+ * Display all products
+ * @param {array | object} products Products to display
+ * @return void
+ */
+ const displayProducts = (products)=>{
     let productsHTML = ""
     products.forEach(element => {
         productsHTML+=
@@ -69,15 +45,13 @@ const displayProducts = (products)=>{
         productContainer.innerHTML = productsHTML  
     });
 
-    /* Sumatoria de la cantidad de productos agregados al carrito */
+    //Sum of all the products in the cart
     for(let i = 0; i < products.length;i++){
         addToCart[i].addEventListener("click", async(e)=>{
             orderList.push(e.target.id)
             await getCartProducts()
             itemsInCart += 1
             let totalValue = localStorage.getItem("Total")
-
-
             localStorage.setItem("Total", +totalValue+1)
             openCart.setAttribute("value", itemsInCart)
             let item = localStorage.getItem(e.target.id)
@@ -91,7 +65,49 @@ const displayProducts = (products)=>{
 }
 
 
-/* Mostrar las categrías */
+
+
+/**
+ * Get products by the input value and display them
+ */
+const search = async()=>{
+    const searchedProducts = await(await fetch(`/api/products/name/${searchInput.value}`)).json();
+    console.log(typeof(searchedProducts))
+    displayProducts(searchedProducts)
+}
+
+/**
+ * Event listener to display elements on the input value
+ */
+searchBtn.addEventListener("click", (e) =>{
+    e.preventDefault()
+    search()
+})
+
+
+/** 
+ * Display Products Filtered by the caregory selected
+ */
+filterBtn.addEventListener("click", async(e)=>{
+    e.preventDefault()
+    filterList = categoriesForm.categories.value;
+    const productsByCategory = await(await fetch(`/api/products/category/${filterList}`)).json();
+    displayProducts(productsByCategory)
+})
+
+//Pushing the id to get the products in the localStorage
+for(let i = 0; i < localStorage.length; i++){
+    if(localStorage.key(i) !== "Total")
+        orderList.push(localStorage.key(i))
+        checkDuplicate.push(localStorage.key(i))
+}
+
+
+/**
+ * Display categories by ID
+ * @param {array | object} categories Categories to display 
+ * @return void
+ * */ 
 const displayCategories = (categories)=>{
     let categoriesHTML = ""
     categories.forEach(element => {
@@ -106,9 +122,11 @@ const displayCategories = (categories)=>{
 }
 
 
-/* Mostrar los productos en la zona del carrito de compras */
-
-
+/**
+ * 
+ * @param {array | object} products Products to display in the cart
+ * @return void
+ */
 const displayCart =  ((products) =>{
     
     let productsHTML = ""
@@ -131,14 +149,14 @@ const displayCart =  ((products) =>{
 })
 
 
-/* Sumar el total del carrito */
-
-/* Abrir Carrito de compras */
+/**
+ * Event Listener to remove display none and show the cart
+ */ 
 openCart.addEventListener("click", ()=>{
     cartBg.classList.remove("hidden")
     cart.classList.remove("hidden")
     displayCart(cartItems)
-    /* Se inicializan las siguientes variables debajo del cartItems para que sus clases sean accesisbles en el DOM */
+    /* This variables initialize here to be accessible at the DOM */
     const lessQuantity = document.querySelectorAll(".minus")
     const plusQuantity = document.querySelectorAll(".plus")
     const price = document.querySelectorAll(".p-price")
@@ -146,7 +164,10 @@ openCart.addEventListener("click", ()=>{
     const quantity = document.querySelectorAll(".product-quantity")
     const listContainer = document.querySelectorAll(".order-container")
 
-    /* Aumenta cantidad de objetos y valor total del carrito */
+    /**
+     * Add quantity to the products in the cart 
+     * @param {object} i products to be updated
+     */
     const changeQuantityPlus = (i) =>{
             let substraction = +price[i].innerText * +quantity[i].innerText
             total = total - substraction
@@ -163,7 +184,10 @@ openCart.addEventListener("click", ()=>{
             cartItems[i].quantity = localStorage.getItem(orderList[i])
     }
 
-    /* Disminuye cantidad de objetos y valor total del carrito */ 
+    /**
+     * Less quantity to the products in the cart 
+     * @param {object} i products to be updated
+     */
     const changeQuantityMinus = ((i) =>{
         console.log(i)
         if(quantity[i].innerText > 1){ 
@@ -189,19 +213,22 @@ openCart.addEventListener("click", ()=>{
             alert("Eliminaste este producto")
         }
     })
-    /* Se llama a las funciones para actualizar los valores de cantidad y monto total del carrito */
+    /* Actualization of the products quantity to be executed with every product */
     plusQuantity.forEach((it, i) => it.addEventListener("click", ()=>changeQuantityPlus(i)))
     lessQuantity.forEach((it, i) => it.addEventListener("click", ()=>changeQuantityMinus(i)))
 })
 
 
 
-/* Cerrar Carrito de compras */
+/* Event Listener to close the cart */
 cartBg.addEventListener("click", ()=>{
     cartBg.classList += "hidden"
     cart.classList += "hidden"
 })
-// Obtiene los productos del carrito que se encontraban guardados en el localStorage
+
+/**
+ * Get all the products that are at the localStorage when you first load the page
+ */
 const getFirstCartProducts = (async()=>{
     for(let i = 0; i < orderList.length; i++){
         const cartProducts = await(await fetch(`/api/products/${orderList[i]}`)).json();
@@ -209,7 +236,12 @@ const getFirstCartProducts = (async()=>{
         cartItems[i].quantity = localStorage.getItem(orderList[i])
     }
 })
-// Compara dos Objetos
+/**
+ * 
+ * @param {object} a first object
+ * @param {object} b second object
+ * @returns {boolean} Which object is greater than the other
+ */
 function compareObj(a, b) {
     let aKeys = Object.keys(a).sort();
     let bKeys = Object.keys(b).sort();
@@ -227,7 +259,9 @@ function compareObj(a, b) {
     return true;
 }
 
-// Actualiza los productos en el carrito
+/**
+ * Get all the products to be displayed in the cart
+ */
 const getCartProducts = (async()=>{
     for(let i = orderList.length-1; i < orderList.length; i++){
         const cartProducts = await(await fetch(`/api/products/${orderList[i]}`)).json();
