@@ -50,10 +50,8 @@ for(let i = 0; i < localStorage.length; i++){
         checkDuplicate.push(localStorage.key(i))
 }
 
-
+/* Mostrar los productos */
 const displayProducts = (products)=>{
-
-    /* Añadir los HTML con los productos*/
     let productsHTML = ""
     products.forEach(element => {
         productsHTML+=
@@ -265,7 +263,6 @@ window.onload = async () =>{
         if (a.category < b.category) {
           return -1;
         }
-        // a must be equal to b
         return 0;
       });
     displayProducts(allProducts)

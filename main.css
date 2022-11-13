@@ -8,7 +8,6 @@
     --Dark-cyan: hsl(158, 36%, 37%);
     --Cream: hsl(30, 38%, 92%);
     --Very-dark-blue: hsl(212, 21%, 14%);
-    --Dark-grayish-blue: hsl(228, 12%, 48%);
     --White: hsl(0, 0%, 100%);
     font-size: 14px;
 }
@@ -16,7 +15,6 @@
     display: none;
 }
 body{
-
     background-color: var(--Cream);
 }
 header{
@@ -27,7 +25,7 @@ header{
     justify-content: space-between;
 }
 i, h1, a{
-    color: white;
+    color: var(--White);
     text-decoration: none;
 }
 .main-cart{
@@ -193,7 +191,6 @@ select{
     margin-top: 2rem;
     display: flex;
     flex-wrap: wrap ;
-    /* grid-template-columns: repeat(auto-fit, 300px);*/
     gap: 2rem 1rem; 
 }
 .container{
