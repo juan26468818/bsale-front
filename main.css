@@ -116,9 +116,6 @@ form{
     list-style: none;
     margin: 1rem 0;
 }
-.product-quantity{
-    /* margin-right: 1rem; */
-}
 .change__quantity{
     margin: 0 .5rem;
     color: var(--White);
@@ -270,4 +267,17 @@ footer{
 }
 small > a{ 
     color: var(--Very-dark-blue);
+}
+
+
+@media (max-width:600px){
+    header{
+        padding: .5rem 1rem;
+    }
+    h1{
+        font-size: 1.2rem;
+    }
+    .header__search{
+        max-width: 12rem;
+    }
 }
