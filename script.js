@@ -122,7 +122,7 @@ const displayCart =  ((products) =>{
         productsHTML+=
         `
         <ul class="order-container">
-            <li class="order-product"><button class="change__quantity minus">-</button><span class="product-quantity">${element.quantity}</span><button class="change__quantity plus">+</button>${element.name}<div class="product-price"><span>$</span><span class=" p-price">${element.price}</span></div></li>
+            <li class="order-product"><button class="change__quantity minus">-</button><span class="product-quantity">${element.quantity}</span><button class="change__quantity plus">+</button>${element.name}<div class="product-price"><span>$</span><span class="p-price" value=${element.id}>${element.price}</span></div></li>
             <li class="product-price">${element.discount ? "Descuento: $" :""}<span class="p-discount">${element.discount ? discountValue :""}</span></li>
         </ul>`;
         
@@ -146,6 +146,7 @@ openCart.addEventListener("click", ()=>{
     const price = document.querySelectorAll(".p-price")
     const discount = document.querySelectorAll(".p-discount")
     const quantity = document.querySelectorAll(".product-quantity")
+    const listContainer = document.querySelectorAll(".order-container")
 
     /* Aumenta cantidad de objetos y valor total del carrito */
     const changeQuantityPlus = (i) =>{
@@ -157,14 +158,17 @@ openCart.addEventListener("click", ()=>{
             total = +total + +newPrice
             totalBuyAmount.innerHTML = total
             itemsInCart++
+            let tag = price[i].getAttribute("value")
+            localStorage.setItem(tag, quantity[i].innerText)
             localStorage.setItem("Total", itemsInCart)
             openCart.setAttribute("value", itemsInCart)
+            cartItems[i].quantity = localStorage.getItem(orderList[i])
     }
 
     /* Disminuye cantidad de objetos y valor total del carrito */ 
     const changeQuantityMinus = ((i) =>{
         console.log(i)
-        if(quantity[i].innerText != 0){ 
+        if(quantity[i].innerText > 1){ 
             let substraction = +price[i].innerText * +quantity[i].innerText
             total = total - substraction
             quantity[i].innerText = +quantity[i].innerText-1
@@ -173,10 +177,19 @@ openCart.addEventListener("click", ()=>{
             total = +total + +newPrice
             totalBuyAmount.innerHTML = total
             itemsInCart--
+            let tag = price[i].getAttribute("value")
+            localStorage.setItem(tag, quantity[i].innerText)
             localStorage.setItem("Total", itemsInCart)
             openCart.setAttribute("value", itemsInCart)
+            cartItems[i].quantity = localStorage.getItem(orderList[i])
         }
-        else alert("Ya eliminaste este producto")
+        else {
+            localStorage.setItem("Total", +itemsInCart-1)
+            localStorage.removeItem(orderList[i])
+            openCart.setAttribute("value", +itemsInCart-1)
+            listContainer[i].classList += " hidden"
+            alert("Eliminaste este producto")
+        }
     })
     /* Se llama a las funciones para actualizar los valores de cantidad y monto total del carrito */
     plusQuantity.forEach((it, i) => it.addEventListener("click", ()=>changeQuantityPlus(i)))
