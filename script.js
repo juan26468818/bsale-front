@@ -15,14 +15,16 @@ const orderList = [];
 const cartItems = [];
 let checkDuplicate = [];
 let itemsInCart = +localStorage.getItem("Total")
+let total = 0
 openCart.setAttribute("value", itemsInCart)
 
 
 
 
 
-/* Buscador */
 
+
+/* Buscador */
 
 const search = async()=>{
     const searchedProducts = await(await fetch(`/api/products/name/${searchInput.value}`)).json();
@@ -32,10 +34,6 @@ searchBtn.addEventListener("click", (e) =>{
     e.preventDefault()
     search()
 })
-
-
-
-
 
 
 /* DisplayProducts Filtered */
@@ -61,15 +59,13 @@ const displayProducts = (products)=>{
         productsHTML+=
             `<div class="container">
                 <picture>
-                    <img src=${element.url_image} class="container__img" alt=${element.name} onerror="this.src='./img/no-image-iconpng.png';" aria-hidden="true"/>
+                <img src=${element.url_image} class="container__img" alt=${element.name} onerror="this.src='./img/no-image-iconpng.png';" aria-hidden="true"/>
                 </picture>
+                <p class="product-discount">${element.discount ? element.discount+"% de descuento" : ""}</p>
                 <div class="product">
                     <p class="container__title">${element.name}</p>
-                    <div class="product-description">
-                        <p class="container__price">$${element.price}</p>
-                        <i class="fa-solid fa-cart-shopping add-to-cart" id=${element.id}></i>
-                    </div>
-                    <p class="product-discount">${element.discount ? element.discount+"% de descuento" : ""}</p>
+                    <p class="product__price">$${element.price}</p>
+                    <span>Agregar al carrito:</span><i class="fa-solid fa-cart-shopping add-to-cart" id=${element.id}></i>
                 </div>
             </div>`
         productContainer.innerHTML = productsHTML  
@@ -114,32 +110,79 @@ const displayCategories = (categories)=>{
 
 /* Mostrar los productos en la zona del carrito de compras */
 
+
 const displayCart =  ((products) =>{
     
     let productsHTML = ""
-    let total = 0
+    total = 0
     products.forEach(element => {
-        total += (+element.price*+element.quantity) - (+element.discount*+element.quantity)
+        let discount = element.discount/100;
+        let discountValue = discount*element.price
+        total += (+element.price*+element.quantity) - (discountValue)
         productsHTML+=
         `
         <ul class="order-container">
-            <li class="order-product"><span class="product-quantity">${element.quantity}</span>${element.name} <span class="product-price">$${element.price}</span></li>
-            <li class="product-price">$${element.discount}</li>
+            <li class="order-product"><button class="change__quantity minus">-</button><span class="product-quantity">${element.quantity}</span><button class="change__quantity plus">+</button>${element.name}<div class="product-price"><span>$</span><span class=" p-price">${element.price}</span></div></li>
+            <li class="product-price">${element.discount ? "Descuento: $" :""}<span class="p-discount">${element.discount ? discountValue :""}</span></li>
         </ul>`;
         
         productOrder.innerHTML = productsHTML;
     });
     totalBuyAmount.innerHTML = total
+    
 })
 
 
+/* Sumar el total del carrito */
 
 /* Abrir Carrito de compras */
-openCart.addEventListener("click", async()=>{
+openCart.addEventListener("click", ()=>{
     cartBg.classList.remove("hidden")
     cart.classList.remove("hidden")
     displayCart(cartItems)
+    /* Se inicializan las siguientes variables debajo del cartItems para que sus clases sean accesisbles en el DOM */
+    const lessQuantity = document.querySelectorAll(".minus")
+    const plusQuantity = document.querySelectorAll(".plus")
+    const price = document.querySelectorAll(".p-price")
+    const discount = document.querySelectorAll(".p-discount")
+    const quantity = document.querySelectorAll(".product-quantity")
+
+    /* Aumenta cantidad de objetos y valor total del carrito */
+    const changeQuantityPlus = (i) =>{
+            let substraction = +price[i].innerText * +quantity[i].innerText
+            total = total - substraction
+            quantity[i].innerText = +quantity[i].innerText+1
+            let newQuantity = +quantity[i].innerText*+price[i].innerText
+            let newPrice = newQuantity - +discount[i].innerText
+            total = +total + +newPrice
+            totalBuyAmount.innerHTML = total
+            itemsInCart++
+            localStorage.setItem("Total", itemsInCart)
+            openCart.setAttribute("value", itemsInCart)
+    }
+
+    /* Disminuye cantidad de objetos y valor total del carrito */ 
+    const changeQuantityMinus = ((i) =>{
+        console.log(i)
+        if(quantity[i].innerText != 0){ 
+            let substraction = +price[i].innerText * +quantity[i].innerText
+            total = total - substraction
+            quantity[i].innerText = +quantity[i].innerText-1
+            let newQuantity = +quantity[i].innerText*+price[i].innerText
+            let newPrice = newQuantity - +discount[i].innerText
+            total = +total + +newPrice
+            totalBuyAmount.innerHTML = total
+            itemsInCart--
+            localStorage.setItem("Total", itemsInCart)
+            openCart.setAttribute("value", itemsInCart)
+        }
+        else alert("Ya eliminaste este producto")
+    })
+    /* Se llama a las funciones para actualizar los valores de cantidad y monto total del carrito */
+    plusQuantity.forEach((it, i) => it.addEventListener("click", ()=>changeQuantityPlus(i)))
+    lessQuantity.forEach((it, i) => it.addEventListener("click", ()=>changeQuantityMinus(i)))
 })
+
 
 
 /* Cerrar Carrito de compras */
@@ -193,7 +236,6 @@ const getCartProducts = (async()=>{
         }
 
         checkDuplicate.push((cartPID).toString())
-
         
     }
 })
@@ -216,4 +258,5 @@ window.onload = async () =>{
     displayProducts(allProducts)
     displayCategories(allCategories)
     getFirstCartProducts()
+    
 }
